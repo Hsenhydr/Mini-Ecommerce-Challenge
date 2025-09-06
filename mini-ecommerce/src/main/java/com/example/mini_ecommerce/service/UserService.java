@@ -2,6 +2,8 @@ package com.example.mini_ecommerce.service;
 
 import java.util.Optional;
 import org.springframework.stereotype.Service;
+
+import com.example.mini_ecommerce.Exceptions.BadRequestException;
 import com.example.mini_ecommerce.entity.User;
 import com.example.mini_ecommerce.repository.UserRepository;
 
@@ -19,7 +21,7 @@ public class UserService implements IUserService {
     public AuthenticationResponseDTO register(UserRegisterDTO dto) {
         Optional<User> email = userRepository.findByEmail(dto.getEmail());
         if (email.isPresent()) {
-            throw new RuntimeException("User already exists: " + dto.getEmail());
+            throw new BadRequestException("User already exists: " + dto.getEmail());
         }
 
         User user = User.builder()
@@ -42,10 +44,10 @@ public class UserService implements IUserService {
     @Override
     public AuthenticationResponseDTO login(UserLoginDTO dto) {
         User user = userRepository.findByEmail(dto.getEmail())
-                .orElseThrow(() -> new RuntimeException("Invalid info"));
+                .orElseThrow(() -> new BadRequestException("Invalid info"));
 
         if (!dto.getPassword().equals(user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadRequestException("Invalid password");
         }
 
         String token = tokenService.generateToken(user);

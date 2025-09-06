@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.mini_ecommerce.entity.Order;
 import com.example.mini_ecommerce.entity.User;
 
-public interface OrderRepository extends JpaRepository<Order, String> {
+public interface OrderRepository extends JpaRepository<Order, Long> {
     // for past orders
     List<Order> findByUser(User user);
+    List<Order> findByUserId(Long userId);
+    
 }

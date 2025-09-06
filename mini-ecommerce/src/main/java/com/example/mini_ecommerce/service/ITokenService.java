@@ -9,4 +9,6 @@ public interface ITokenService {
     boolean validateToken(String token);
 
     String extractUserEmail(String token);
+
+    String extractUserRole(String token);
 }

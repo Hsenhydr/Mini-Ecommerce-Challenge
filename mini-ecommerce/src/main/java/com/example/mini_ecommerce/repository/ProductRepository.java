@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.mini_ecommerce.entity.Product;
 
-public interface ProductRepository extends JpaRepository<Product, String> {
+public interface ProductRepository extends JpaRepository<Product, Long> {
     // list of products ll admin(mafroud <5)
     List<Product> findByStockLessThan(int stock);
 }
