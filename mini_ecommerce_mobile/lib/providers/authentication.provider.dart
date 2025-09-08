@@ -68,7 +68,7 @@ class AuthProvider extends ChangeNotifier {
         },
       );
 
-      if (res.statusCode == 200) {
+      if (res.statusCode == 200 || res.statusCode == 201) {
         return await login(email, password);
       } else {
         errorMessage = 'Register failed: ${res.statusCode})';
