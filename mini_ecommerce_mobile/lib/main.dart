@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 import 'providers/authentication.provider.dart';
 import 'providers/product.provider.dart';
@@ -11,8 +12,9 @@ import 'screens/adminPages/admin.dart';
 import 'screens/cart.dart';
 import 'screens/userOrders.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: ".env");
   runApp(const MiniEcommerceApp());
 }
 

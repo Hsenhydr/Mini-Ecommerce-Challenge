@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class ApiRequests {
   // Networking ✔️ as mentioned in task (used http package)
-  static String baseUrl = 'http://10.0.2.2:8080';
+  static String baseUrl = '${dotenv.env['API_BASE']}';
 
   static Future<http.Response> post(String path, dynamic body,
       {String? token}) {
