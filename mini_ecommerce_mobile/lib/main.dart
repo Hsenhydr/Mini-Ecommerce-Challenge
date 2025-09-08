@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/authentication.provider.dart';
 import 'providers/product.provider.dart';
+import 'providers/theme.provider.dart';
 import 'providers/cart.provider.dart';
 import 'screens/login.dart';
 import 'screens/register.dart';
@@ -25,22 +26,33 @@ class MiniEcommerceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => CartProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: 'Flutter Mini‑Ecommerce Coding Challenge',
-        theme: ThemeData(
-          useMaterial3: true, // as mentioned in task
-          colorSchemeSeed: const Color.fromARGB(255, 4, 0, 255),
-        ),
-        home: const MainPage(),
-        // routes as mentioned in task
-        routes: {
-          '/login': (_) => const LoginScreen(),
-          '/register': (_) => const RegisterScreen(),
-          '/products': (_) => const ProductPage(),
-          '/admin': (_) => const AdminScreen(),
-          '/cart': (_) => const CartScreen(),
-          '/orders': (_) => const UserOrdersPage(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, _) {
+          return MaterialApp(
+            title: 'Flutter Mini‑Ecommerce Coding Challenge',
+            theme: ThemeData(
+              useMaterial3: true,
+              colorSchemeSeed: const Color.fromARGB(255, 4, 0, 255),
+              brightness: Brightness.light,
+            ),
+            darkTheme: ThemeData(
+              useMaterial3: true,
+              colorSchemeSeed: const Color.fromARGB(255, 4, 0, 255),
+              brightness: Brightness.dark,
+            ),
+            themeMode: themeProvider.isDark ? ThemeMode.dark : ThemeMode.light,
+            home: const MainPage(),
+            routes: {
+              '/login': (_) => const LoginScreen(),
+              '/register': (_) => const RegisterScreen(),
+              '/products': (_) => const ProductPage(),
+              '/admin': (_) => const AdminScreen(),
+              '/cart': (_) => const CartScreen(),
+              '/orders': (_) => const UserOrdersPage(),
+            },
+          );
         },
       ),
     );
