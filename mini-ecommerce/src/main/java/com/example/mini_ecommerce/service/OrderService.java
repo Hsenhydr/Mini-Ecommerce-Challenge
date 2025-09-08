@@ -36,28 +36,44 @@ public class OrderService {
     public Order addOrder(Long userId, List<OrderItem> items) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User not found"));
+    
         Order order = new Order();
         order.setUser(user);
         order.setCreatedAt(LocalDateTime.now());
+    
         double totalAmount = 0;
         List<OrderItem> orderItems = new ArrayList<>();
-
+    
         for (OrderItem item : items) {
             Product product = productRepository.findById(item.getProduct().getId())
                     .orElseThrow(() -> new NotFoundException("Product not found"));
+
             OrderItem orderItem = new OrderItem();
             orderItem.setProduct(product);
             orderItem.setQuantity(item.getQuantity());
-            orderItem.setPrice(item.getPrice());
+    
+            double price = product.getPrice();
+            orderItem.setPrice(price);
+    
             orderItem.setOrder(order);
-            totalAmount += item.getPrice() * item.getQuantity();
+    
+            if (product.getStock() < item.getQuantity()) {
+                throw new BadRequestException("Insufficient stock for product: " + product.getName());
+            }
+    
+            product.setStock(product.getStock() - item.getQuantity());
+            productRepository.save(product);
+    
+            totalAmount += price * item.getQuantity();
             orderItems.add(orderItem);
         }
+    
         order.setItems(orderItems);
         order.setTotalAmount(totalAmount);
+    
         return orderRepository.save(order);
     }
-
+      
     public List<Order> getOrdersByUser(Long userId) {
         if (userId == null) {
             throw new NotFoundException("User ID cannot be null");

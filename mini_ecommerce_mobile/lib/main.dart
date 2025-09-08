@@ -1,0 +1,89 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'providers/authentication.provider.dart';
+import 'providers/product.provider.dart';
+import 'providers/cart.provider.dart';
+import 'screens/login.dart';
+import 'screens/register.dart';
+import 'screens/products.dart';
+import 'screens/adminPages/admin.dart';
+import 'screens/cart.dart';
+import 'screens/userOrders.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const MiniEcommerceApp());
+}
+
+class MiniEcommerceApp extends StatelessWidget {
+  const MiniEcommerceApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ProductProvider()),
+        ChangeNotifierProvider(create: (_) => CartProvider()),
+      ],
+      child: MaterialApp(
+        title: 'Flutter Mini‑Ecommerce Coding Challenge',
+        theme: ThemeData(
+          useMaterial3: true, // as mentioned in task
+          colorSchemeSeed: const Color.fromARGB(255, 4, 0, 255),
+        ),
+        home: const MainPage(),
+        // routes as mentioned in task
+        routes: {
+          '/login': (_) => const LoginScreen(),
+          '/register': (_) => const RegisterScreen(),
+          '/products': (_) => const ProductPage(),
+          '/admin': (_) => const AdminScreen(),
+          '/cart': (_) => const CartScreen(),
+          '/orders': (_) => const UserOrdersPage(),
+        },
+      ),
+    );
+  }
+}
+
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
+
+  @override
+  State<MainPage> createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuth();
+  }
+
+  // check auth, eza auth -> products/admin else login
+  Future<void> _checkAuth() async {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    await auth.autoLogin();
+
+    if (!mounted) return;
+
+    if (auth.isAuthenticated) {
+      Navigator.pushReplacementNamed(
+        context,
+        auth.role == 'ADMIN' ? '/admin' : '/products',
+      );
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
