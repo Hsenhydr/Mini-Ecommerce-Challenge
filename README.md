@@ -49,8 +49,5 @@ flutter run
 
 ## Demo Video
 
-<video width="400" controls>
-  <source src="https://github.com/Hsenhydr/Mini-Ecommerce-Challenge/blob/main/mini_ecommerce_mobile/lib/IMG_1720.MOV" type="video/mp4">
-  Your browser does not support HTML video.
-</video>
+[▶️ Watch Demo Video](https://github.com/Hsenhydr/Mini-Ecommerce-Challenge/blob/main/mini_ecommerce_mobile/lib/IMG_1720.MOV)
 
